@@ -1,4 +1,4 @@
-import {selectorAuth, tryLogin, tryLoginWithGoogleCredentials} from "appRedux/reducers/api/account";
+import {selectorAuth, tryLogin} from "appRedux/reducers/api/account";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 import {
     buttonTheme,
@@ -12,7 +12,6 @@ import {
 import {FormErrors} from "components/FormComponents/FormErrors/FormErrors.jsx";
 
 import {StyledLoginFormComponent} from "components/FormComponents/LoginForm/style.js";
-import {SignInWithGoogleButton} from "components/SignInWithGoogleButton/SignInWithGoogleButton.tsx";
 import withErrors from "components/withErrors.jsx";
 import {Button, Input, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from "react";
@@ -41,10 +40,6 @@ const LoginForm = () => {
         setDisabled(true);
     }, [email, password]);
 
-    const attemptLoginWithGoogleCredentials = useCallback((response) => {
-        dispatch(tryLoginWithGoogleCredentials(response.accessToken));
-    }, []);
-
     const renderSignInButton = useCallback(() => {
         const path = authState.path;
         const isLoginContext = path === 'login';
@@ -61,10 +56,6 @@ const LoginForm = () => {
             setDisabled(false);
         }
     }, [errors]);
-
-    const onGoogleAuthFailure = useCallback((response) => {
-        console.log(response);
-    }, []);
 
     return <StyledLoginFormComponent {...animatedWindowProps}>
         <form onSubmit={attemptLogin} className={'form'} autoComplete="none">
@@ -100,16 +91,6 @@ const LoginForm = () => {
             <StyledLink style={{marginTop: 20}} to={'/forgotPassword'}>{t('FORGOT_PASSWORD')}</StyledLink>
 
             <StyledButtonGroup>{renderSignInButton()}</StyledButtonGroup>
-
-            <SignInWithGoogleButton
-                clientId="sdfdf"
-                buttonText={t('SIGNIN_WTH_GOOGLE')}
-                onSuccess={attemptLoginWithGoogleCredentials}
-                onFailure={onGoogleAuthFailure}
-                theme={'light'}
-                disabled={false}
-                uxMode={'popup'}
-            />
         </form>
     </StyledLoginFormComponent>;
 };
